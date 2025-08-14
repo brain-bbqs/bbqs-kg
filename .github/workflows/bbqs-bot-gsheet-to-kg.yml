@@ -1,0 +1,81 @@
+name: Google Sheet to Knowledge Graphs
+
+on:
+  workflow_dispatch:
+    inputs:
+      sheet_name:        { required: false, default: "" }
+      spreadsheet_id:    { required: false, default: "" }
+      spreadsheet_name:  { required: false, default: "" }
+      change_type:       { required: false, default: "" }
+      edited_a1:         { required: false, default: "" }
+      actor_email:       { required: false, default: "" }
+      source:            { required: false, default: "google-sheets" }
+      out_format:        { required: false, default: "csv" }   # csv|json #default save data format
+      out_path:          { required: false, default: "data/sheets/output.csv" }
+
+jobs:
+  run-with-python:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      # Safe write of multiline JSON secret (no echo)
+      # Note: you need to get this key form google API service for google sheets
+      - name: Write service account key to file
+        run: |
+          cat > sa_key.json <<'JSON'
+          ${{ secrets.GCP_SA_KEY }}
+          JSON
+
+      - name: Validate key JSON
+        run: |
+          python - <<'PY'
+          import json
+          json.load(open('sa_key.json','r',encoding='utf-8'))
+          print("sa_key.json is valid JSON")
+          PY
+
+      - name: Process Google Sheet → file
+        run: |
+          python scripts/process_sheet_and_save.py \
+            --spreadsheet-id "${{ github.event.inputs.spreadsheet_id }}" \
+            --sheet-name "${{ github.event.inputs.sheet_name }}" \
+            --out-path "${{ github.event.inputs.out_path }}" \
+            --out-format "${{ github.event.inputs.out_format }}" \
+            --sa-key-file sa_key.json
+
+      - name: Verify output exists
+        run: |
+          test -f "${{ github.event.inputs.out_path }}" && echo "Found ${{ github.event.inputs.out_path }}" || (echo "Not found!" && exit 1)
+
+      - name: Commit generated file
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git add "${{ github.event.inputs.out_path }}"
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update from Google Sheets → ${{ github.event.inputs.out_path }}"
+            git push
+          else
+            echo "No changes to commit."
+          fi
