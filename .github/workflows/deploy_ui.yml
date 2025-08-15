@@ -49,34 +49,34 @@ jobs:
         run: |
           # Create a static data file from the JSONL data
           python3 -c "
-import json
-import sys
-sys.path.append('../scripts')
-from process_sheet_and_save import load_knowledge_graph_data, transform_to_community_members
-
-# Load and transform data
-kg_data = load_knowledge_graph_data()
-community_members = transform_to_community_members(kg_data)
-
-# Extract categories
-all_categories = set()
-for entry in kg_data:
-    for mapping_array in entry['mappings'].values():
-        if isinstance(mapping_array, list):
-            for mapping in mapping_array:
-                if mapping.get('concept_label'):
-                    all_categories.add(mapping['concept_label'])
-
-# Create static data
-static_data = {
-    'materials': community_members,
-    'categories': sorted(list(all_categories))
-}
-
-# Write to public directory
-with open('public/static-data.json', 'w') as f:
-    json.dump(static_data, f, indent=2)
-"
+          import json
+          import sys
+          sys.path.append('../scripts')
+          from process_sheet_and_save import load_knowledge_graph_data, transform_to_community_members
+          
+          # Load and transform data
+          kg_data = load_knowledge_graph_data()
+          community_members = transform_to_community_members(kg_data)
+          
+          # Extract categories
+          all_categories = set()
+          for entry in kg_data:
+              for mapping_array in entry['mappings'].values():
+                  if isinstance(mapping_array, list):
+                      for mapping in mapping_array:
+                          if mapping.get('concept_label'):
+                              all_categories.add(mapping['concept_label'])
+          
+          # Create static data
+          static_data = {
+              'materials': community_members,
+              'categories': sorted(list(all_categories))
+          }
+          
+          # Write to public directory
+          with open('public/static-data.json', 'w') as f:
+              json.dump(static_data, f, indent=2)
+          "
         working-directory: ./ui
 
       - name: Build with Next.js
