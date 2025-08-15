@@ -30,6 +30,25 @@ The work has since been extended to include the following:
 
 ![](architecture.png)
 
+## 🛠 How It Works?
+
+1. **People of BBQS** submit updates via Slack.  
+2. Data is stored in **Google Sheets**.  
+3. **Google App Script** listens for changes and triggers **GitHub Actions**.  
+4. `process_sheet_and_save.py`:
+   - Reads sheet data.
+   - Calls LLM for ontology mapping.
+   - Stores outputs in **CSV** + **JSON** formats.  
+5. Results are committed back to the **GitHub repository**.
+
+## 💡 What’s New in This Release?
+
+- **Automated Data Flow**: From Slack submissions to Google Sheets and Google Cloud processing.  
+- **Ontology Mapping via AI**: Integrated OpenRouter LLM for automated concept alignment.  
+- **GitHub Actions Integration**: Every sheet update triggers automated CSV + JSON-LD exports.  
+- **Mapping Cache**: Faster re-processing without redundant LLM calls.    
+
+
 ## Todo 
 - [] Improve mapping and prompts
 
