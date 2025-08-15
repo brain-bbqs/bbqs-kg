@@ -45,9 +45,9 @@ jobs:
             echo "DATA_PATH=../data/sheets/output_kg.jsonl" > .env.local
           fi
 
-      - name: Copy data to static build
+      - name: Copy data for static build
         run: |
-          # Copy the JSONL data file to the public directory
+          mkdir -p public
           cp ../data/sheets/output_kg.jsonl public/data.jsonl
         working-directory: ./ui
 
@@ -63,6 +63,14 @@ jobs:
           ls -la out/
           echo "Static files:"
           find out/ -name "*.html" -o -name "*.css" -o -name "*.js" | head -10
+        working-directory: ./ui
+
+      - name: Copy data to build output
+        run: |
+          # Copy the data file to the build output directory
+          cp public/data.jsonl out/data.jsonl
+          echo "Data file copied to build output:"
+          ls -la out/data.jsonl
         working-directory: ./ui
 
       - name: Setup Pages
