@@ -158,6 +158,22 @@ function mergeInputs_(jsonStr, auto) {
   return merged;
 }
 
+function debugListWorkflows() {
+  validateConfig_();
+  const url = `https://api.github.com/repos/${encodeURIComponent(CFG.owner)}/${encodeURIComponent(CFG.repo)}/actions/workflows`;
+  const resp = ghFetch_(url, { method: 'get', muteHttpExceptions: true });
+  Logger.log(resp.getResponseCode() + ' ' + resp.getContentText());
+}
+
+function debugGetWorkflowByName() {
+  validateConfig_();
+  const wf = CFG.workflowFile; // what you set in Script Properties
+  const url = `https://api.github.com/repos/${encodeURIComponent(CFG.owner)}/${encodeURIComponent(CFG.repo)}/actions/workflows/${encodeURIComponent(wf)}`;
+  const resp = ghFetch_(url, { method: 'get', muteHttpExceptions: true });
+  Logger.log(`GET /workflows/${wf} -> ` + resp.getResponseCode() + ' ' + resp.getContentText());
+}
+
+
 function validateConfig_() {
   const missing = [];
   if (!CFG.token) missing.push('GITHUB_TOKEN');
