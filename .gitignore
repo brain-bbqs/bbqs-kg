@@ -1,0 +1,45 @@
+# ------------------------
+# Python
+# ------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+develop-eggs/
+.installed.cfg
+pip-wheel-metadata/
+*.manifest
+*.spec
+*.log
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# ------------------------
+# PyCharm / JetBrains
+# ------------------------
+.idea/
+*.iml
+
+# ------------------------
+# macOS / Windows OS junk
+# ------------------------
+.DS_Store
+Thumbs.db
+
