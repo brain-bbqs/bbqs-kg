@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy UI to GitHub Pages
 
 on:
   push:
@@ -31,19 +31,59 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: 'ui/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./ui
 
       - name: Setup environment
         run: |
-          # Create .env.local if it doesn't exist
+          # Create .env.local in the ui directory
+          cd ui
           if [ ! -f .env.local ]; then
             echo "DATA_PATH=../data/sheets/output_kg.jsonl" > .env.local
           fi
 
+      - name: Generate static data
+        run: |
+          # Create a static data file from the JSONL data
+          python3 -c "
+import json
+import sys
+sys.path.append('../scripts')
+from process_sheet_and_save import load_knowledge_graph_data, transform_to_community_members
+
+# Load and transform data
+kg_data = load_knowledge_graph_data()
+community_members = transform_to_community_members(kg_data)
+
+# Extract categories
+all_categories = set()
+for entry in kg_data:
+    for mapping_array in entry['mappings'].values():
+        if isinstance(mapping_array, list):
+            for mapping in mapping_array:
+                if mapping.get('concept_label'):
+                    all_categories.add(mapping['concept_label'])
+
+# Create static data
+static_data = {
+    'materials': community_members,
+    'categories': sorted(list(all_categories))
+}
+
+# Write to public directory
+with open('public/static-data.json', 'w') as f:
+    json.dump(static_data, f, indent=2)
+"
+        working-directory: ./ui
+
       - name: Build with Next.js
         run: npm run build
+        working-directory: ./ui
+        env:
+          NODE_ENV: production
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -51,8 +91,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire 'out' directory
-          path: './out'
+          # Upload the 'out' directory from the ui folder
+          path: './ui/out'
 
   # Deployment job
   deploy:
