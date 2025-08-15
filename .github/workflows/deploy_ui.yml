@@ -47,6 +47,8 @@ jobs:
 
       - name: Copy data to static build
         run: |
+          # Create public directory if it doesn't exist
+          mkdir -p public
           # Copy the JSONL data file to the public directory
           cp ../data/sheets/output_kg.jsonl public/data.jsonl
         working-directory: ./ui
