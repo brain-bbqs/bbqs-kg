@@ -103,7 +103,7 @@ function transformToCommunityMembers(data: KnowledgeGraphEntry[]): CommunityMemb
         title: entry.fields.Name || 'Anonymous Member',
         description: description,
         type,
-        keywords: [...new Set(keywords)] as string[],
+        keywords: Array.from(new Set(keywords.filter(Boolean))) as string[],
         programmingLanguage,
         platform,
         accessMaterial: `mailto:${entry.fields.Name?.toLowerCase().replace(/\s+/g, '.')}@example.com`,
