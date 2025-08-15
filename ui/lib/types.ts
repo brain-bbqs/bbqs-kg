@@ -37,7 +37,6 @@ export interface CommunityMember {
   programmingLanguage?: string;
   platform?: string;
   accessMaterial?: string;
-  quadrants?: string[];
   originalData?: KnowledgeGraphEntry; // Include original data for ontology mappings
 }
 
