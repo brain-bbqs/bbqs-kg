@@ -3,10 +3,12 @@ import { KnowledgeGraphEntry, CommunityMember } from './types';
 // Client-side function to fetch data from API
 export async function fetchCommunityMembers(): Promise<{members: CommunityMember[], categories: string[]}> {
   try {
+    const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
     // For static export, we'll use a different approach
             if (process.env.NODE_ENV === 'production') {
           // In production (GitHub Pages), load from static data file
-          const response = await fetch('/data.jsonl');
+          // IMPORTANT: no hardcoded leading slash without basePath
+          const response = await fetch(`${base}/data.jsonl`);
           if (!response.ok) {
             throw new Error('Failed to fetch static data');
           }
