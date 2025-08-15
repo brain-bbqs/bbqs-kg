@@ -1,0 +1,395 @@
+[
+  {
+    "fields": {
+      "Role": "I work with the DCAIC Leadership team",
+      "Expertise": "methods for reproducible research",
+      "Interest": "how the human social brain develops",
+      "Note": "This is a great consortium",
+      "Name": "David Kennedy",
+      "Time": "45855.71949074074"
+    },
+    "mappings": {
+      "Role": [],
+      "Expertise": [],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "graduate student, DCAIC, supporting primarily AI/ML and data standards working groups",
+      "Expertise": "data analysis of high dimensional data, specifically dimensionality reduction, method development with synthetic validation, information theory",
+      "Interest": "Experimental design & data details across projects; custom softwares; analytical approaches and best practices",
+      "Note": "",
+      "Name": "Kailin Zhuang",
+      "Time": "45855.73806712963"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Graduate Student",
+          "ontology_id": "Wikidata:Q3918",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "A person who has graduated from a first degree program and is pursuing further education."
+        },
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        }
+      ],
+      "Expertise": [
+        {
+          "concept_label": "High-Dimensional Data",
+          "ontology_id": "Wikidata:Q11006177",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Data analysis that involves data in more than three dimensions."
+        },
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        },
+        {
+          "concept_label": "Information Theory",
+          "ontology_id": "Wikidata:Q150671",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "The study of quantification, storage, and communication of information."
+        }
+      ],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "MEG, MRI, MRS, data acquisition, analysis. In humans. Mostly children. Often children with NDDs",
+      "Expertise": "",
+      "Interest": "",
+      "Note": "",
+      "Name": "Tim Roberts",
+      "Time": "45855.744050925925"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Magnetoencephalography",
+          "ontology_id": "Wikidata:Q156314",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "A non-invasive imaging technique for mapping brain activity."
+        },
+        {
+          "concept_label": "Magnetic resonance imaging",
+          "ontology_id": "Wikidata:Q151210",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "A medical imaging technique used in radiology to form pictures of the anatomy and the physiological processes."
+        },
+        {
+          "concept_label": "Magnetic resonance spectroscopy",
+          "ontology_id": "Wikidata:Q156311",
+          "ontology": "Wikidata",
+          "confidence": 0.75,
+          "explanation": "An in vivo diagnostic test used to study metabolic changes in tissues."
+        },
+        {
+          "concept_label": "Data Acquisition",
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": 0.7,
+          "explanation": "General term for the process of collecting data."
+        }
+      ],
+      "Expertise": [],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "Pediatrics Research, Neuroimaging research (MEG), Vulnerable Populations",
+      "Expertise": "Psychometrics, standardized behavioral/cognitive measures, behavioral support protocols for participants",
+      "Interest": "Methods in computational neuroscience, EEG data acquisition and measurement workflows, multivariate statistics procedures for multimodal research, concepts in electrical engineering and computational neuroscience as they pertain to neuroimaging research",
+      "Note": "",
+      "Name": "Aditya Bhise",
+      "Time": "45855.74747685185"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Pediatrics",
+          "ontology_id": "Wikidata:Q9307",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Field of medicine related to children"
+        },
+        {
+          "concept_label": "Magnetoencephalography",
+          "ontology_id": "Wikidata:Q816544",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "A technique used to measure the magnetic fields produced by neuronal activity"
+        },
+        {
+          "concept_label": "Vulnerable population",
+          "ontology_id": "Wikidata:Q1002559",
+          "ontology": "Wikidata",
+          "confidence": 0.85,
+          "explanation": "Groups of individuals who are at higher risk for poor health outcomes"
+        }
+      ],
+      "Expertise": [
+        {
+          "concept_label": "Psychometrics",
+          "ontology_id": "Wikidata:Q206196",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "The field concerned with the theory and technique of psychological measurement"
+        },
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        }
+      ],
+      "Interest": [
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        },
+        {
+          "concept_label": "Multivariate statistics",
+          "ontology_id": "Wikidata:Q196877",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Statistical methods that involve multiple variables"
+        }
+      ]
+    }
+  },
+  {
+    "fields": {
+      "Role": "Devices, Neural Interfaces, Hardware and Embedded Design, Human",
+      "Expertise": "Whatever I know",
+      "Interest": "",
+      "Note": "",
+      "Name": "Uros Topalovic",
+      "Time": "45855.756516203706"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Neural Interface",
+          "ontology_id": "Wikidata:Q132541",
+          "ontology": "Wikidata",
+          "confidence": 0.85,
+          "explanation": "Technology that enables direct communication between the brain and external devices."
+        },
+        {
+          "concept_label": "Computer Hardware",
+          "ontology_id": "Wikidata:Q70",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "The physical components of a computer."
+        },
+        {
+          "concept_label": "Embedded System",
+          "ontology_id": "Wikidata:Q220959",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "A computer system with a dedicated function within a larger mechanical or electrical system."
+        },
+        {
+          "concept_label": "Human",
+          "ontology_id": "Wikidata:Q5",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Human species."
+        }
+      ],
+      "Expertise": [
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        }
+      ],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "Data Acquisition, mice, social behavior, spikegadgets",
+      "Expertise": "Data acquisition of HR, neural, and respiratory data in freely socially behaving mice",
+      "Interest": "",
+      "Note": "",
+      "Name": "Sequioa Smith",
+      "Time": "45855.75599537037"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Data Acquisition",
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": 0.7,
+          "explanation": "General term for the process of collecting data."
+        },
+        {
+          "concept_label": "House Mouse",
+          "ontology_id": "Wikidata:Q10025",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "A common laboratory animal."
+        },
+        {
+          "concept_label": "Social behavior",
+          "ontology_id": "Wikidata:Q645041",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Behavior that involves interaction with others."
+        }
+      ],
+      "Expertise": [
+        {
+          "concept_label": "Neural",
+          "ontology_id": "Wikidata:Q199770",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Pertaining to nerves or the nervous system."
+        }
+      ],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "NIH Program Officer",
+      "Expertise": "",
+      "Interest": "",
+      "Note": "",
+      "Name": "Dana Schloesser",
+      "Time": "45856.79157407407"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": null,
+          "ontology_id": null,
+          "ontology": null,
+          "confidence": null,
+          "explanation": null
+        }
+      ],
+      "Expertise": [],
+      "Interest": []
+    }
+  },
+  {
+    "fields": {
+      "Role": "neuroinformatics, machine learning, neuroimaging, signal processing, infrastructure",
+      "Expertise": "signal processing, machine learning, infrastructure",
+      "Interest": "ethics, governance, machine learning",
+      "Note": "",
+      "Name": "Satrajit Ghosh",
+      "Time": "45855.73793981481"
+    },
+    "mappings": {
+      "Role": [
+        {
+          "concept_label": "Neuroinformatics",
+          "ontology_id": "Wikidata:Q279655",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Interdisciplinary field that combines neuroscience and informatics"
+        },
+        {
+          "concept_label": "Machine learning",
+          "ontology_id": "Wikidata:Q35680",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Field of artificial intelligence"
+        },
+        {
+          "concept_label": "Neuroimaging",
+          "ontology_id": "Wikidata:Q9704",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Methods to visualize the structure or function of the brain"
+        },
+        {
+          "concept_label": "Signal processing",
+          "ontology_id": "Wikidata:Q185226",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Analysis, interpretation, and manipulation of signals"
+        },
+        {
+          "concept_label": "Infrastructure",
+          "ontology_id": "Wikidata:Q8577",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Physical and organizational structures for operation"
+        }
+      ],
+      "Expertise": [
+        {
+          "concept_label": "Signal processing",
+          "ontology_id": "Wikidata:Q185226",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Analysis, interpretation, and manipulation of signals"
+        },
+        {
+          "concept_label": "Machine learning",
+          "ontology_id": "Wikidata:Q35680",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Field of artificial intelligence"
+        },
+        {
+          "concept_label": "Infrastructure",
+          "ontology_id": "Wikidata:Q8577",
+          "ontology": "Wikidata",
+          "confidence": 0.8,
+          "explanation": "Physical and organizational structures for operation"
+        }
+      ],
+      "Interest": [
+        {
+          "concept_label": "Ethics",
+          "ontology_id": "Wikidata:Q240168",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Philosophical study of moral values and rules"
+        },
+        {
+          "concept_label": "Governance",
+          "ontology_id": "Wikidata:Q246170",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Processes of decision-making in organizations"
+        },
+        {
+          "concept_label": "Machine learning",
+          "ontology_id": "Wikidata:Q35680",
+          "ontology": "Wikidata",
+          "confidence": 0.9,
+          "explanation": "Field of artificial intelligence"
+        }
+      ]
+    }
+  }
+]
