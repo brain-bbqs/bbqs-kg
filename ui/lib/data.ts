@@ -5,13 +5,16 @@ export async function fetchCommunityMembers(): Promise<{members: CommunityMember
   try {
     const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
     // For static export, we'll use a different approach
-            if (process.env.NODE_ENV === 'production') {
-          // In production (GitHub Pages), load from static data file
-          // IMPORTANT: no hardcoded leading slash without basePath
-          const response = await fetch(`${base}/data.jsonl`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch static data');
-          }
+                if (process.env.NODE_ENV === 'production') {
+      // In production (GitHub Pages), load from static data file
+      // IMPORTANT: no hardcoded leading slash without basePath
+      const dataUrl = `${base}/data.jsonl`;
+      console.log('Fetching data from:', dataUrl, 'base:', base);
+      const response = await fetch(dataUrl);
+      if (!response.ok) {
+        console.error('Failed to fetch data from:', dataUrl, 'Status:', response.status);
+        throw new Error('Failed to fetch static data');
+      }
           const text = await response.text();
           const lines = text.trim().split('\n');
       
