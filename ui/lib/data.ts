@@ -3,14 +3,24 @@ import { KnowledgeGraphEntry, CommunityMember } from './types';
 // Client-side function to fetch data from API
 export async function fetchCommunityMembers(): Promise<{members: CommunityMember[], categories: string[]}> {
   try {
+    console.log('Starting fetchCommunityMembers');
     const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    console.log('Base path resolved to:', base);
+    
     // For static export, we'll use a different approach
-                if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
+      console.log('Entering production block');
       // In production (GitHub Pages), load from static data file
       // IMPORTANT: no hardcoded leading slash without basePath
       const dataUrl = `${base}/data.jsonl`;
       console.log('Fetching data from:', dataUrl, 'base:', base);
+      console.log('NODE_ENV:', process.env.NODE_ENV);
+      console.log('NEXT_PUBLIC_BASE_PATH:', process.env.NEXT_PUBLIC_BASE_PATH);
+      
       const response = await fetch(dataUrl);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      
       if (!response.ok) {
         console.error('Failed to fetch data from:', dataUrl, 'Status:', response.status);
         throw new Error('Failed to fetch static data');
