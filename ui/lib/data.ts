@@ -15,11 +15,23 @@ export async function fetchCommunityMembers(): Promise<{members: CommunityMember
         console.error('Failed to fetch data from:', dataUrl, 'Status:', response.status);
         throw new Error('Failed to fetch static data');
       }
-          const text = await response.text();
-          const lines = text.trim().split('\n');
+                const text = await response.text();
+      console.log('Response text length:', text.length);
+      console.log('Response text preview:', text.substring(0, 200));
       
+      const lines = text.trim().split('\n');
+      console.log('Number of lines:', lines.length);
+      console.log('First line:', lines[0]);
+  
       // Parse JSONL data
-      const kgData = lines.map(line => JSON.parse(line));
+      const kgData = lines.map((line, index) => {
+        try {
+          return JSON.parse(line);
+        } catch (error) {
+          console.error(`Error parsing line ${index}:`, line, error);
+          throw error;
+        }
+      });
       
       // Transform to community members
       const members: CommunityMember[] = [];
