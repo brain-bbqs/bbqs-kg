@@ -28,7 +28,11 @@ The work has since been extended to include the following:
 
 ## Architecture
 
+### Core pipeline
 ![](architecture.png)
+
+### UI 
+Contains the NextJS code for visualization.
 
 ## 🛠 How It Works?
 
@@ -40,6 +44,7 @@ The work has since been extended to include the following:
    - Calls LLM for ontology mapping.
    - Stores outputs in **CSV** + **JSON** formats.  
 5. Results are committed back to the **GitHub repository**.
+6. Visualize the data in a user friendly manner.
 
 ## 💡 What’s New in This Release?
 
