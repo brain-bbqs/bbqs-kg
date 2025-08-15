@@ -29,25 +29,35 @@ export async function fetchCommunityMembers(): Promise<{members: CommunityMember
       console.log('Response text length:', text.length);
       console.log('Response text preview:', text.substring(0, 200));
       
-      const lines = text.trim().split('\n');
-      console.log('Number of lines:', lines.length);
-      console.log('First line:', lines[0]);
-  
-      // Parse JSONL data
-      const kgData = lines.map((line, index) => {
-        try {
-          return JSON.parse(line);
-        } catch (error) {
-          console.error(`Error parsing line ${index}:`, line, error);
-          throw error;
-        }
-      });
+      let kgData;
+      
+      // Check if it's JSON array format (starts with [) or JSONL format
+      if (text.trim().startsWith('[')) {
+        console.log('Detected JSON array format');
+        // Parse as JSON array
+        kgData = JSON.parse(text);
+      } else {
+        console.log('Detected JSONL format');
+        // Parse as JSONL (one JSON object per line)
+        const lines = text.trim().split('\n');
+        console.log('Number of lines:', lines.length);
+        console.log('First line:', lines[0]);
+        
+        kgData = lines.map((line, index) => {
+          try {
+            return JSON.parse(line);
+          } catch (error) {
+            console.error(`Error parsing line ${index}:`, line, error);
+            throw error;
+          }
+        });
+      }
       
       // Transform to community members
       const members: CommunityMember[] = [];
       const allCategories = new Set<string>();
       
-      kgData.forEach((entry, index) => {
+      kgData.forEach((entry: any, index: number) => {
         if (!entry.fields?.Name) return;
         
         // Extract keywords from mappings
