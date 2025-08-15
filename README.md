@@ -49,8 +49,11 @@ The work has since been extended to include the following:
 - **Mapping Cache**: Faster re-processing without redundant LLM calls.    
 
 
-## Todo 
-- [] Improve mapping and prompts
+## To-Do
+- [ ] Refine concept mapping logic
+- [ ] Improve prompt design and consistency
+- [ ] Save processed results in JSON-LD format  
+
 
 ## License
 - MIT
