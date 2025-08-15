@@ -1,19 +1,19 @@
 /**
- * Google Apps Script — Trigger GitHub Action (workflow_dispatch) on Google Sheet changes.
- * Event: Installable "On change" trigger (From spreadsheet → On change)
+ * Trigger GitHub Action (workflow_dispatch) on Google Sheet edits.
+ * Event: Installable "On edit" trigger (From spreadsheet → On edit)
  *
  * ====== REQUIRED SCRIPT PROPERTIES (Project Settings → Script Properties) ======
  * GITHUB_TOKEN   = <GitHub PAT with "repo" scope>
  * GITHUB_OWNER   = <owner or org>
  * GITHUB_REPO    = <repo name>
- * GITHUB_BRANCH  = main                          (or your branch/tag)
- * WORKFLOW_FILE  = .github/workflows/sheets-sync.yml   (or your workflow filename)
+ * GITHUB_BRANCH  = main
+ * WORKFLOW_FILE  = .github/workflows/sheets-sync.yml
  *
  * ====== OPTIONAL SCRIPT PROPERTIES ======
- * SHEET_NAME            = <only trigger when this tab is active> (optional)
- * ALLOWED_CHANGE_TYPES  = EDIT,FORMAT,INSERT_ROW,INSERT_COLUMN,REMOVE_ROW,REMOVE_COLUMN,OTHER   (CSV)
+ * SHEET_NAME            = <only fire when this tab is edited> (optional)
  * DEBOUNCE_SECONDS      = 30
  * WORKFLOW_INPUTS_JSON  = {"source":"google-sheets"}   // merged with auto inputs
+ * SPREADSHEET_ID        = <target spreadsheet id> (only if this is a standalone script)
  */
 
 const CFG = (() => {
@@ -25,64 +25,45 @@ const CFG = (() => {
     branch: p.getProperty('GITHUB_BRANCH') || 'main',
     workflowFile: p.getProperty('WORKFLOW_FILE') || null,
     sheetName: p.getProperty('SHEET_NAME') || null,
-    allowedChangeTypes: (p.getProperty('ALLOWED_CHANGE_TYPES') || '')
-      .split(',').map(s => s.trim().toUpperCase()).filter(Boolean),
     debounceSeconds: parseInt(p.getProperty('DEBOUNCE_SECONDS') || '30', 10),
-    staticInputsJSON: p.getProperty('WORKFLOW_INPUTS_JSON') || '{}'
+    staticInputsJSON: p.getProperty('WORKFLOW_INPUTS_JSON') || '{}',
+    spreadsheetId: p.getProperty('SPREADSHEET_ID') || null
   };
 })();
 
-/** Installable "On change" trigger entrypoint. */
-function onSpreadsheetChange(e) {
+/** === MAIN: Installable On-edit trigger handler === */
+function onSheetEdit(e) {
   try {
     if (!shouldRunNow_()) return;
 
-    const changeType = (e && e.changeType) ? String(e.changeType).toUpperCase() : 'OTHER';
-    if (CFG.allowedChangeTypes.length && !CFG.allowedChangeTypes.includes(changeType)) {
-      console.log(`Skipped (changeType=${changeType} not allowed).`);
-      return;
-    }
-
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = (e && e.source) ? e.source : SpreadsheetApp.getActiveSpreadsheet();
     if (!ss) throw new Error('No active spreadsheet.');
 
-    const activeSheet = ss.getActiveSheet();
-    const activeSheetName = activeSheet ? activeSheet.getName() : '';
+    const range = e && e.range ? e.range : null;
+    const sheet = range ? range.getSheet() : ss.getActiveSheet();
 
-    if (CFG.sheetName && activeSheetName && CFG.sheetName !== activeSheetName) {
-      console.log(`Skipped (sheet "${activeSheetName}" != "${CFG.sheetName}")`);
+    // Optional: only fire for a specific sheet (tab)
+    if (CFG.sheetName && sheet && sheet.getName() !== CFG.sheetName) {
+      console.log(`Skipped (sheet "${sheet.getName()}" != "${CFG.sheetName}")`);
       return;
     }
 
-    // Best-effort capture of edited range (onChange doesn’t always include it)
-    let editedA1 = '';
-    try {
-      const rng = ss.getActiveRange();
-      if (rng) editedA1 = rng.getA1Notation();
-    } catch (_ignored) {}
+    const editedA1 = range ? range.getA1Notation() : '';
+    const activeSheetName = sheet ? sheet.getName() : '';
+    const actorEmail = (function(){ try { return Session.getActiveUser().getEmail() || ''; } catch(_){ return ''; } })();
 
-    let actorEmail = '';
-    try {
-      actorEmail = Session.getActiveUser().getEmail() || '';
-    } catch (_ignored) {}
-
-    // Build workflow_dispatch inputs (strings only)
-    const autoInputs = {
-      sheet_name:       activeSheetName || '',
+    const inputs = mergeInputs_(CFG.staticInputsJSON, {
+      sheet_name:       activeSheetName,
       spreadsheet_id:   ss.getId(),
       spreadsheet_name: ss.getName(),
-      change_type:      changeType,
+      change_type:      'EDIT',
       edited_a1:        editedA1,
       actor_email:      actorEmail,
       source:           'google-sheets'
-    };
-    const inputs = mergeInputs_(CFG.staticInputsJSON, autoInputs);
+    });
 
     dispatchWorkflow_(inputs);
-
-    console.log(
-      `Dispatched ${CFG.workflowFile} for ${ss.getName()} [sheet=${activeSheetName}, changeType=${changeType}, edited=${editedA1}]`
-    );
+    console.log(`Dispatched ${CFG.workflowFile} for ${ss.getName()} [${activeSheetName} ${editedA1}]`);
   } catch (err) {
     console.error('workflow dispatch failed:', err);
     try { SpreadsheetApp.getActive().toast(`GitHub Action dispatch failed: ${safeStr_(err.message)}`); } catch (_){}
@@ -91,24 +72,49 @@ function onSpreadsheetChange(e) {
 
 /** Manual test: run once to authorize & verify config. */
 function testDispatch() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getSpreadsheet_();
   const sheet = ss.getActiveSheet();
+  const activeSheetName = sheet ? sheet.getName() : '';
   const inputs = mergeInputs_(CFG.staticInputsJSON, {
-    sheet_name:       sheet ? sheet.getName() : '',
+    sheet_name:       activeSheetName,
     spreadsheet_id:   ss.getId(),
     spreadsheet_name: ss.getName(),
     change_type:      'MANUAL_TEST',
     edited_a1:        (sheet && sheet.getActiveRange()) ? sheet.getActiveRange().getA1Notation() : '',
     actor_email:      (function(){ try { return Session.getActiveUser().getEmail() || ''; } catch(_){ return ''; } })(),
-    source:           'google-sheets',
-     out_format:       'csv',                                 // or 'json'
-  out_path:         `data/sheets/${activeSheetName}.csv`,  // customize
+    source:           'google-sheets'
   });
   dispatchWorkflow_(inputs);
-  try { SpreadsheetApp.getActive().toast('✅ GitHub Action dispatched (check Actions).'); } catch (_){}
+  try { SpreadsheetApp.getActive().toast('GitHub Action dispatched (check Actions).'); } catch (_){}
 }
 
-/** GitHub workflow_dispatch call. */
+/** === Deployment helpers === */
+
+/** Create (or replace) the installable On-edit trigger for this project. */
+function installOnEditTrigger() {
+  const ss = getSpreadsheet_();
+  // Remove existing triggers for this function first (idempotent)
+  ScriptApp.getProjectTriggers()
+    .filter(t => t.getHandlerFunction() === 'onSheetEdit')
+    .forEach(t => ScriptApp.deleteTrigger(t));
+
+  ScriptApp.newTrigger('onSheetEdit')
+    .forSpreadsheet(ss)   // binds to target spreadsheet
+    .onEdit()
+    .create();
+
+  Logger.log(`On-edit trigger installed for spreadsheet: ${ss.getName()} (${ss.getId()})`);
+}
+
+/** If standalone script, use SPREADSHEET_ID; else use bound spreadsheet. */
+function getSpreadsheet_() {
+  if (CFG.spreadsheetId) return SpreadsheetApp.openById(CFG.spreadsheetId);
+  const bound = SpreadsheetApp.getActiveSpreadsheet();
+  if (!bound) throw new Error('No active spreadsheet. Set SPREADSHEET_ID in Script Properties for standalone scripts.');
+  return bound;
+}
+
+/** === GitHub call === */
 function dispatchWorkflow_(inputsObj) {
   validateConfig_();
 
@@ -128,7 +134,7 @@ function dispatchWorkflow_(inputsObj) {
   }
 }
 
-/** Helpers */
+/** === Utilities === */
 function ghFetch_(url, options) {
   if (!CFG.token) throw new Error('Missing GITHUB_TOKEN.');
   const headers = Object.assign({}, options && options.headers, {
@@ -145,7 +151,7 @@ function mergeInputs_(jsonStr, auto) {
   try { staticInputs = JSON.parse(jsonStr || '{}') || {}; }
   catch (e) { console.warn('Invalid WORKFLOW_INPUTS_JSON; ignoring.'); }
   const merged = Object.assign({}, staticInputs, auto);
-  Object.keys(merged).forEach(k => { // GitHub requires strings
+  Object.keys(merged).forEach(k => {
     const v = merged[k];
     merged[k] = (v === null || v === undefined) ? '' : String(v);
   });
@@ -172,4 +178,3 @@ function shouldRunNow_() {
 }
 
 function safeStr_(s) { try { return String(s); } catch (_){ return ''; } }
-
