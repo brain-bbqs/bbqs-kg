@@ -85,6 +85,15 @@ with open('public/static-data.json', 'w') as f:
         env:
           NODE_ENV: production
 
+          
+      - name: List build output
+        run: |
+          echo "Build output contents:"
+          ls -la out/
+          echo "Static files:"
+          find out/ -name "*.html" -o -name "*.css" -o -name "*.js" | head -10
+        working-directory: ./ui
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
