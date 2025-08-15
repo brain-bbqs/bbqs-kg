@@ -103,11 +103,9 @@ function transformToCommunityMembers(data: KnowledgeGraphEntry[]): CommunityMemb
         title: entry.fields.Name || 'Anonymous Member',
         description: description,
         type,
-        keywords: [...new Set(keywords)] as string[],
+        keywords: Array.from(new Set(keywords.filter(Boolean))) as string[],
         programmingLanguage,
         platform,
-        accessMaterial: `mailto:${entry.fields.Name?.toLowerCase().replace(/\s+/g, '.')}@example.com`,
-        quadrants: quadrants.length > 0 ? quadrants : ['NA'],
         originalData: entry // Include the original data for ontology mappings
       };
     });
@@ -120,7 +118,6 @@ export async function GET() {
     
     // Extract all unique categories from mappings
     const allCategories = new Set<string>();
-    const allQuadrants = new Set<string>();
     
     kgData.forEach(entry => {
       // Extract concept labels from all mapping fields
@@ -135,22 +132,11 @@ export async function GET() {
       });
     });
     
-    // Extract quadrants from the transformed materials
-    communityMembers.forEach(member => {
-      if (member.quadrants) {
-        member.quadrants.forEach(quadrant => {
-          allQuadrants.add(quadrant);
-        });
-      }
-    });
-    
     const categories = Array.from(allCategories).sort();
-    const quadrants = Array.from(allQuadrants).sort();
     
     return NextResponse.json({ 
       materials: communityMembers,
-      categories: categories,
-      quadrants: quadrants
+      categories: categories
     });
   } catch (error) {
     console.error('Error in API route:', error);
