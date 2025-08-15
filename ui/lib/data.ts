@@ -4,14 +4,14 @@ import { KnowledgeGraphEntry, CommunityMember } from './types';
 export async function fetchCommunityMembers(): Promise<{members: CommunityMember[], categories: string[]}> {
   try {
     // For static export, we'll use a different approach
-    if (process.env.NODE_ENV === 'production') {
-      // In production (GitHub Pages), load from static data file
-      const response = await fetch('/data.jsonl');
-      if (!response.ok) {
-        throw new Error('Failed to fetch static data');
-      }
-      const text = await response.text();
-      const lines = text.trim().split('\n');
+            if (process.env.NODE_ENV === 'production') {
+          // In production (GitHub Pages), load from static data file
+          const response = await fetch('/data.jsonl');
+          if (!response.ok) {
+            throw new Error('Failed to fetch static data');
+          }
+          const text = await response.text();
+          const lines = text.trim().split('\n');
       
       // Parse JSONL data
       const kgData = lines.map(line => JSON.parse(line));
