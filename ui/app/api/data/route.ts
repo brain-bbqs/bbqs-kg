@@ -6,6 +6,7 @@ import { KnowledgeGraphEntry, CommunityMember } from '@/lib/types';
 async function loadKnowledgeGraphData(): Promise<KnowledgeGraphEntry[]> {
   try {
     // Use environment variable for data path, fallback to default
+    // used for dev/server setting where no static generation and for github we use lib/data.ts. 
     const dataPath = process.env.DATA_PATH || path.join(process.cwd(), 'data', 'output_kg.jsonl');
     
     // If DATA_PATH is provided as a relative path, resolve it from the project root
